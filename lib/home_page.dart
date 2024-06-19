@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   File ? _selectedImage;
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  double valorOpacidad = 0.5;
 
   @override
   void initState() {
@@ -77,10 +78,29 @@ class _HomePageState extends State<HomePage> {
             height: size.height,
             child: _selectedImage != null
                 ? Opacity(
-                  opacity: 0.5,
-                  child: Image.file(_selectedImage!)
+                  opacity: valorOpacidad,
+                  child: InteractiveViewer(
+                    minScale: 0.5,
+                    maxScale: 2,
+                    child: Image.file(_selectedImage!),
+                  )
                 )
                 : const Text('Please, select an image'),
+          ),
+
+          Column(
+            children: [
+              Spacer(),
+              Slider(
+                value: valorOpacidad,
+                label: valorOpacidad.round().toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    valorOpacidad = value;
+                  });
+                },
+              ),
+            ],
           ),
         ],
       ),
